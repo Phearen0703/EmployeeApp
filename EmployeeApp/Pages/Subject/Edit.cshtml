@@ -1,0 +1,61 @@
+﻿@page "{id:int}"
+@model EmployeeApp.Pages.Subject.EditModel
+
+@{
+    ViewData["Title"] = "Edit Subject";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+
+            <h1>Edit Subject</h1>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <form method="post">
+
+                <input type="hidden" asp-for="Subject.id" />
+
+                <div class="mb-3">
+                    <label asp-for="Subject.sub_name" class="form-label">
+                        Subject Name
+                    </label>
+
+                    <input asp-for="Subject.sub_name"
+                           class="form-control" />
+
+                    <span asp-validation-for="Subject.sub_name"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Subject.sort" class="form-label">
+                        Sort
+                    </label>
+
+                    <input asp-for="Subject.sort"
+                           class="form-control"
+                           type="number" />
+
+                    <span asp-validation-for="Subject.sort"
+                          class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Update
+                </button>
+
+                <a asp-page="./Index" class="btn btn-danger">
+                    Back
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

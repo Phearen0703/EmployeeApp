@@ -1,0 +1,58 @@
+﻿@page
+@model EmployeeApp.Pages.Subject.IndexModel
+@{
+    ViewData["Title"] = "Subject";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Subject</h1>
+
+    <a asp-page="./Create" class="btn btn-primary">
+        + Add Subject
+    </a>
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>N.O</th>
+            <th>Name</th>
+            <th>Short</th>
+            <th style="width: 180px;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Subjects.Any())
+        {
+            @foreach (var subject in Model.Subjects)
+            {
+                <tr>
+                    <td>@subject.id</td>
+                    <td>@subject.sub_name</td>
+                    <td>@subject.sort</td>
+                    <td>
+                        <a asp-page="./Edit"
+                           asp-route-id="@subject.id"
+                           class="btn btn-sm btn-warning">
+                            Edit
+                        </a>
+
+                        <a asp-page="./Delete"
+                           asp-route-id="@subject.id"
+                           class="btn btn-sm btn-danger">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center">
+                    No subjects found.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,124 @@
+@page
+@model EmployeeApp.Pages.Employees.IndexModel
+
+@{
+    ViewData["Title"] = "Employees";
+    var hasFilter = !string.IsNullOrWhiteSpace(Model.SearchString)
+                    || Model.GenderId.HasValue || Model.LocationId.HasValue
+                    || Model.StatusId.HasValue || Model.SubjectId.HasValue;
+}
+
+<div class="container-fluid mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Employees</h1>
+
+        <a asp-page="./Create" class="btn btn-primary">+ Create Employee</a>
+    </div>
+
+    <form method="get" class="card card-body mb-3">
+        <div class="row g-2 align-items-end">
+
+            <div class="col-md-3">
+                <label asp-for="SearchString" class="form-label">Search</label>
+                <input asp-for="SearchString" class="form-control"
+                       placeholder="ID, name, gender, location, status, subject" />
+            </div>
+
+            <div class="col-md-2">
+                <label asp-for="GenderId" class="form-label">Gender</label>
+                <select asp-for="GenderId" asp-items="Model.Genders" class="form-select">
+                    <option value="">All</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label asp-for="LocationId" class="form-label">Location</label>
+                <select asp-for="LocationId" asp-items="Model.Locations" class="form-select">
+                    <option value="">All</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label asp-for="StatusId" class="form-label">Status</label>
+                <select asp-for="StatusId" asp-items="Model.Statuses" class="form-select">
+                    <option value="">All</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label asp-for="SubjectId" class="form-label">Subject</label>
+                <select asp-for="SubjectId" asp-items="Model.SubjectItems" class="form-select">
+                    <option value="">All</option>
+                </select>
+            </div>
+
+            <div class="col-md-1 d-grid gap-1">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+
+        @if (hasFilter)
+        {
+            <div class="mt-2">
+                <a asp-page="./Index" class="btn btn-sm btn-outline-secondary">Reset</a>
+            </div>
+        }
+    </form>
+
+    <p class="text-muted">@Model.Employees.Count employee(s) found</p>
+
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Gender</th>
+                <th>Location</th>
+                <th>Salary</th>
+                <th>Date Hired</th>
+                <th>Status</th>
+                <th>Subjects</th>
+                <th style="width: 150px;">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (!Model.Employees.Any())
+            {
+                <tr>
+                    <td colspan="10" class="text-center">No employees found.</td>
+                </tr>
+            }
+
+            @foreach (var item in Model.Employees)
+            {
+                <tr>
+                    <td>@item.id</td>
+                    <td>@item.first_name</td>
+                    <td>@item.last_name</td>
+                    <td>@item.Gender?.gender</td>
+                    <td>@item.Location?.loc_name</td>
+                    <td>@item.salary?.ToString("N0")</td>
+                    <td>@item.date_hired?.ToString("yyyy-MM-dd")</td>
+                    <td>@item.Status?.status_name</td>
+                    <td>
+                        @foreach (var es in item.EmpSubs.Where(x => x.Subject != null).OrderBy(x => x.Subject!.sort))
+                        {
+                            <span class="badge text-bg-secondary">@es.Subject!.sub_name</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.id"
+                           class="btn btn-sm btn-warning">Edit</a>
+
+                        <a asp-page="./Delete" asp-route-id="@item.id"
+                           class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
